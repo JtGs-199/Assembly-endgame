@@ -24,15 +24,18 @@ export default function AssemblyEndgame() {
     const [guessedLetters, setGuessedLetters] = useState([])
 
     // Derived values
-    const numGuessesLeft = languages.length - 1
+    const maxWrongGuesses = languages.length - 1
     const wrongGuessCount =
         guessedLetters.filter(letter => !currentWord.includes(letter)).length
+    const numGuessesLeft = maxWrongGuesses - wrongGuessCount
     const isGameWon =
         currentWord.split("").every(letter => guessedLetters.includes(letter))
-    const isGameLost = wrongGuessCount >= numGuessesLeft
+    const isGameLost = wrongGuessCount >= maxWrongGuesses
     const isGameOver = isGameWon || isGameLost
     const lastGuessedLetter = guessedLetters[guessedLetters.length - 1]
     const isLastGuessIncorrect = lastGuessedLetter && !currentWord.includes(lastGuessedLetter)
+    const gameFaces = ["😄", "🙂", "😐", "😕", "🙁", "😟", "😢", "😭", "💀"]
+    const gameFace = gameFaces[Math.min(wrongGuessCount, gameFaces.length - 1)]
 
     // Static values
     const alphabet = "abcdefghijklmnopqrstuvwxyz"
@@ -93,8 +96,7 @@ export default function AssemblyEndgame() {
             <button
                 className={className}
                 key={letter}
-                disabled={isGameOver}
-                aria-disabled={guessedLetters.includes(letter)}
+                disabled={isGameOver || isGuessed}
                 aria-label={`Letter ${letter}`}
                 onClick={() => addGuessedLetter(letter)}
             >
@@ -152,6 +154,14 @@ export default function AssemblyEndgame() {
                 <p>Guess the word within 8 attempts to keep the
                 programming world safe from Assembly!</p>
             </header>
+
+            <p
+                className="game-face"
+                role="img"
+                aria-label={`${wrongGuessCount} wrong guesses`}
+            >
+                {gameFace}
+            </p>
 
             <section
                 aria-live="polite"

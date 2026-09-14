@@ -33,6 +33,12 @@ header > p {
     color: #8E8E8E;
 }
 
+.game-face {
+    font-size: 3rem;
+    line-height: 1;
+    margin: 18px 0 0;
+}
+
 section.game-status {
     display: flex;
     flex-direction: column;
